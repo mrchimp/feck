@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import curses
 import sys
 
@@ -5,24 +8,36 @@ screen = curses.initscr()
 
 screen_y, screen_x = screen.getmaxyx()
 
-curses.noecho()
-curses.curs_set(0)
+#curses.noecho()
+curses.cbreak()
+#curses.curs_set(0)
 screen.keypad(1)
 
-screen.addstr(5, 10, "This is a string")
+output_win = curses.newwin(screen_y - 1, screen_x - 1, 1, 0)
+output_win.addstr("heres some text\n")
+output_win.addstr("heres some more\n")
+output_win.refresh()
 
-screen.addstr(10, 10, "Reverse Styled String", curses.A_REVERSE)
+input_win = curses.newwin(1, 1, 0, 0)
+input_win.addstr(">> ")
+input_win.refresh()
 
 while True: 
     #event = screen.getch()
-    screen.addstr(1,1, '>> ')
     screen.refresh()
-    input = screen.getstr(2, 2, 60)
+    curses.echo()
+    input = input_win.getstr(0, 4, 60)
+    curses.noecho()
     input = input.decode(sys.stdout.encoding)
     if input == 'quit' or input == 'q': break
-    screen.refresh()
-    screen.addstr(10, 10, input)
-    screen.refresh()
+    input_win.clear()
+    input_win.addstr(0,0, '>> ')
+    input_win.refresh()
+    output_win.addstr(input + "\n")
+    output_win.refresh()
     
-   
+curses.nocbreak()
+screen.keypad(0)
+curses.echo()
 curses.endwin()
+
