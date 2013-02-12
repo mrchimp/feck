@@ -4,6 +4,7 @@
 import curses
 import sys
 import os
+from FeckClient import *
 
 prompt_str = "Say > "
 chatmode_str = "Chat Mode - type /quit or /q to leave"
@@ -11,7 +12,13 @@ chatmode_str = "Chat Mode - type /quit or /q to leave"
 class Feck:
 
     def __init__(self):
+        self.feck_client = FeckClient()
+        self.feck_client.connect()
+        
         curses.wrapper(self.main)
+        
+        self.feck_client.disconnect()
+        
         print('Bye then.')
 
     def main(self, screen):
@@ -48,7 +55,10 @@ class Feck:
             self.input_win.clear()
             self.input_win.addstr(0,0, prompt_str)
             self.input_win.refresh()
+            
             self.showMessage(input)
+            resp = self.feck_client.send(input)
+            self.showMessage("server said: " + str(resp))
         
     def showStatus(self, msg):
         self.status_win.clear()
