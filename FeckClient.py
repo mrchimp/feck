@@ -1,4 +1,4 @@
-# A simple echo client 
+
 import socket 
 
 class FeckClient:

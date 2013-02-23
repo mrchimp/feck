@@ -1,4 +1,4 @@
-# A simple echo server 
+
 import socket 
 
 class FeckServer:
